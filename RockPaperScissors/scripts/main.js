@@ -1,7 +1,7 @@
 //return the computers choice
 function getComputerChoice()
 {
-    let choices = ['rock', 'paper', 'scissors'];
+    const choices = ['rock', 'paper', 'scissors'];
     return choices[Math.floor(Math.random()*3)];
 }
 
@@ -11,13 +11,14 @@ function scoreEval(player, computer)
     let score = 0;
     if(player === computer)
     {
-        score = 0;
+        return score;
     }
-    else if((player === "scissors" && computer==='paper') ||
+    if((player === "scissors" && computer ==='paper') ||
             (player === "paper" && computer === 'rock')||
             (player === "rock" && computer === 'scissors'))
     {
         score = 1;
+        return score;
     }
     else 
     {
@@ -29,35 +30,29 @@ function scoreEval(player, computer)
 //display the result of the game including the chioce of both the computer and the player
 function showScore(player, computer, playerScore)
 {
-    let result = document.getElementById('result');
-    switch(playerScore)
-    {
-        case 0:
-            result.innerText = 'Its a draw🫣';
-            break;
-        case 1:
-            result.innerText = 'You won🏆';
-            break;
-        case -1:
-            result.innerText = 'You lost☹️';
-            break;
-    }
-
-    let hands = document.getElementById("hands");
+    //displays the outcome of the current round
+    const result = document.getElementById('result');
+    const resultObj = { '0' : 'Its a draw🫣', '1': 'You won🏆', '-1':'You lost☹️'};
+    result.innerText = resultObj[playerScore.toString()];
+   
+    //displays the player's choice in the current round
+    const hands = document.getElementById("hands");
+    hands.innerText = `👱🏻‍♀️player: ${player} 🖥️computer: ${computer}`;
     
-    let scoreDisplay = document.getElementById("player-score");
-    let currentScore = Number(scoreDisplay.innerText);
+    //displays the overall score
+    const scoreDisplay = document.getElementById("player-score");
+    let scoreContent = scoreDisplay.innerText.split(':');
+    let currentScore = Number(scoreContent[1]);
     let finalScore = 0;
     if (isNaN(currentScore)) {
         //if its the first round of the game (currentScore == NaN)
         finalScore = playerScore;
     } 
     else {
-        finalScore = playerScore+currentScore;
-        console.log("else");
+        finalScore = playerScore + currentScore;
     }
-    scoreDisplay.innerText = `Final score: ${finalScore}`;
-    hands.innerText = `👱🏻‍♀️player: ${player} 🖥️computer: ${computer}`;
+    scoreDisplay.innerText = `Final score:${finalScore}`;
+   
 }
 
 //Determine the score of the game
@@ -69,7 +64,17 @@ function onClickRPSButton(rpsbutton)
 
 }
 
-//add onclick  eventListener to the rock paper scissors and endGame buttons
+//if endGameButton is clicked clear all the logs from the previous game 
+function endGame() {
+    const playerScore = document.getElementById('player-score');
+    const hands = document.getElementById('hands');
+    const result = document.getElementById('result');
+    playerScore.innerText = '';
+    hands.innerText = '';
+    result.innerText = '';
+}
+
+//the main function: check for the user's activity
 function playGame()
 {
     let playButton = document.querySelectorAll(".playButton");
@@ -82,14 +87,6 @@ function playGame()
 
 }
 
-//if endGameButton is clicked clear all the logs from the previous game 
-function endGame() {
-    let playerScore = document.getElementById('player-score');
-    let hands = document.getElementById('hands');
-    let result = document.getElementById('result');
-    playerScore.innerText = '';
-    hands.innerText = '';
-    result.innerText = '';
-  }
 
+//starting point of the code
 playGame();
